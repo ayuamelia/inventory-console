@@ -1,6 +1,6 @@
 # Inventory Console – Products & Stock Adjustments
 
-This project is an inventory console built as part of a technical assessment.
+This project is an inventory console.
 
 It consists of:
 
