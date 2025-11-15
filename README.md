@@ -214,4 +214,11 @@ These endpoints are used by the frontend to:
 
 - Display a live product catalog with current stock  
 - Perform product CRUD operations  
-- Record and manage stock movements while keeping inventory consistent  
+- Record and manage stock movements while keeping inventory consistent
+
+### Tests
+
+Run unit tests for the API:
+
+```bash
+yarn test

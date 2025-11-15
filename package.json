@@ -11,7 +11,10 @@
     "pg-promise": "^12.3.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   },
@@ -19,6 +22,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "migrate": "psql postgres://postgres:admin@localhost:5432/postgres -f src/db/migrations/init_1.sql"
+    "migrate": "psql postgres://postgres:admin@localhost:5432/postgres -f src/db/migrations/init_1.sql",
+    "test": "jest",
+    "test:watch": "jest --watch"
   }
 }

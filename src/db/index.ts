@@ -7,3 +7,7 @@ const pgp = pgPromise();
 const db = pgp(process.env.DATABASE_URL as string);
 
 export default db;
+
+export function closeDb() {
+  pgp.end();
+}
