@@ -34,7 +34,12 @@ yarn install
 #    Create .env in the backend folder
 
 # 3. Run database migrations
-psql "$DATABASE_URL" -f src/db/migrations/init_1.sql
+
+# Option A: using the package.json script
+yarn migrate
+
+# Option B: using psql directly
+# psql "$DATABASE_URL" -f src/db/migrations/init_1.sql
 
 # 4. Start the API in development mode
 yarn dev
