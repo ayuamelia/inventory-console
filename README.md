@@ -99,7 +99,7 @@ Directory structure (simplified):
 └── frontend
     ├── src
     │   ├── pages
-    │   │   ├── index.tsx        # redirect or wrapper to /products
+    │   │   ├── index.tsx
     │   │   ├── products.tsx
     │   │   └── adjustments.tsx
     │   ├── lib
