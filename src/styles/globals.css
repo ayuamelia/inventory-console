@@ -1,0 +1,907 @@
+/* =========================
+   THEME VARIABLES
+   ========================= */
+
+:root {
+  /* background */
+  --bg-body: #020617;
+  --bg-surface: #020617;
+  --bg-surface-soft: #020617f5;
+  --bg-input: #020617;
+  --bg-chip: rgba(15, 23, 42, 0.9);
+
+  /* text */
+  --text-main: #f9fafb;
+  --text-soft: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* border */
+  --border-subtle: rgba(148, 163, 184, 0.4);
+
+  /* accents */
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.15);
+  --accent-strong: #7dd3fc;
+
+  /* status colors */
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.12);
+  --danger: #f97373;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --bg-body: #f3f4f6;
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #f9fafb;
+  --bg-input: #ffffff;
+  --bg-chip: rgba(243, 244, 246, 0.95);
+
+  --text-main: #111827;
+  --text-soft: #6b7280;
+  --text-muted: #9ca3af;
+
+  --border-subtle: rgba(209, 213, 219, 1);
+
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --accent-strong: #2563eb;
+
+  --success: #16a34a;
+  --success-soft: rgba(22, 163, 74, 0.12);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.12);
+}
+
+/* Explicit dark theme (optional, mirrors default) */
+:root[data-theme="dark"] {
+  --bg-body: #020617;
+  --bg-surface: #020617;
+  --bg-surface-soft: #020617f5;
+  --bg-input: #020617;
+  --bg-chip: rgba(15, 23, 42, 0.9);
+
+  --text-main: #f9fafb;
+  --text-soft: #9ca3af;
+  --text-muted: #6b7280;
+
+  --border-subtle: rgba(148, 163, 184, 0.4);
+
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.15);
+  --accent-strong: #7dd3fc;
+
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.12);
+  --danger: #f97373;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+
+/* =========================
+   GLOBAL RESET
+   ========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #0b1120, var(--bg-body));
+  color: var(--text-main);
+}
+
+/* Override khusus light theme */
+:root[data-theme="light"] body,
+:root[data-theme="light"] html {
+  background: radial-gradient(circle at top, #ffffff, #e5e7eb);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* =========================
+   APP SHELL
+   ========================= */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.app-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  background: linear-gradient(
+    to right,
+    var(--bg-surface),
+    var(--bg-surface-soft)
+  );
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 1rem 1.5rem 1.25rem;
+}
+
+.app-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Brand */
+
+.app-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.app-brand-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 0%, #38bdf8, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.app-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.app-brand-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.app-brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  max-width: 260px;
+}
+
+/* Tabs */
+
+.app-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+.app-nav-link {
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  color: #e5e7eb;
+  text-decoration: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.app-nav-link:hover {
+  border-color: rgba(148, 163, 184, 0.6);
+  background: rgba(67, 85, 126, 0.95);
+}
+
+.app-nav-link--active {
+  background: linear-gradient(135deg, #38bdf8, #60a5fa);
+  color: #020617;
+  box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.8);
+}
+
+:root[data-theme="light"] .app-nav {
+  background: #e5e7eb; /* track terang */
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.45);
+}
+
+:root[data-theme="light"] .app-nav-link {
+  color: #111827;        /* teks tab gelap */
+  background: transparent;
+}
+
+:root[data-theme="light"] .app-nav-link:hover {
+  background: #d1d5db;   /* hover light grey */
+  border-color: rgba(148, 163, 184, 0.8);
+}
+
+/* Active tab di light theme tetap biru, tapi kontrasnya pas */
+:root[data-theme="light"] .app-nav-link--active {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: #f9fafb;
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.9);
+}
+
+/* Theme toggle button */
+
+.theme-toggle-btn {
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--accent-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .theme-toggle-btn {
+  background: #f9fafb;
+}
+
+:root[data-theme="light"] .theme-toggle-btn:hover {
+  background: var(--accent-soft);
+}
+
+/* Header responsive */
+
+@media (max-width: 768px) {
+  .app-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .app-header-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .app-nav {
+    flex: 1 1 auto;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .app-brand-subtitle {
+    max-width: 100%;
+  }
+}
+
+/* Main container */
+
+.app-main {
+  flex: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+/* =========================
+   SURFACE / CARD
+   ========================= */
+
+.surface {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.82);
+  padding: 1.25rem;
+}
+
+.surface-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.surface-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.surface-title h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+}
+
+.surface-title p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* =========================
+   TOOLBAR / INPUT / CHIP
+   ========================= */
+
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.toolbar-input {
+  min-width: 180px;
+}
+
+.input {
+  background: var(--bg-input);
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  min-width: 180px;
+}
+
+.input::placeholder {
+  color: var(--text-soft);
+}
+
+.chip {
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.btn {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    background 0.12s ease,
+    border-color 0.12s ease;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f9fafb; /* default: tombol gelap, teks terang */
+}
+
+/* Primary action (Save changes, Add, dsb) */
+.btn-primary {
+  background: linear-gradient(to right, #0ea5e9, #38bdf8);
+  border-color: #7dd3fc;
+  color: #0b1120;
+  box-shadow: 0 14px 35px rgba(56, 189, 248, 0.4);
+}
+
+/* Ghost / secondary (Details, Cancel, Delete) */
+.btn-ghost {
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+}
+
+/* Disabled state */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Hover default (dark theme) */
+.btn:not(:disabled):hover {
+  transform: translateY(-0.5px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+}
+
+/* ===== Light theme button tuning ===== */
+
+/* Di light theme, default button tetap dark pill, tapi hover tidak sehitam tadi */
+:root[data-theme="light"] .btn {
+  background: #111827;
+  color: #f9fafb;
+}
+
+/* Primary di light theme tetap gradient biru seperti biasa */
+:root[data-theme="light"] .btn-primary {
+  background: linear-gradient(to right, #0ea5e9, #38bdf8);
+  border-color: #7dd3fc;
+  color: #0b1120;
+}
+
+/* Ghost buttons (Details / Cancel / Delete) di light theme jadi light pill */
+:root[data-theme="light"] .btn-ghost {
+  background: #f3f4f6;
+  color: #111827;
+  border-color: rgba(148, 163, 184, 0.7);
+}
+
+/* Hover di light theme: lebih soft, tidak terlalu gelap */
+:root[data-theme="light"] .btn:not(:disabled):hover {
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+}
+
+:root[data-theme="light"] .btn-ghost:not(:disabled):hover {
+  background: #e5e7eb;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+}
+
+/* =========================
+   PRODUCTS GRID
+   ========================= */
+
+.products-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.product-card {
+  border-radius: 0.9rem;
+  border: 1px solid var(--border-subtle);
+  background: radial-gradient(
+    circle at top left,
+    var(--bg-surface),
+    var(--bg-surface-soft)
+  );
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.product-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.product-sku {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+
+.product-stock-badge {
+  font-size: 0.7rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.product-stock-ok {
+  border-color: var(--success);
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.product-stock-low {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.product-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.product-price {
+  font-size: 0.8rem;
+  color: var(--accent-strong);
+}
+
+.product-footer {
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-meta {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+}
+
+/* Product images */
+
+.product-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  background: radial-gradient(circle at top, #1f2937, #020617);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  display: block;
+}
+
+.product-image-placeholder {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.product-image-preview {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-subtle);
+  background: radial-gradient(circle at top, #020617, #020617f5);
+  width: 100%;
+  max-height: 300px;
+  min-height: 140px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image-preview img {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  display: block;
+}
+
+.product-image-preview span {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+:root[data-theme="light"] .product-image-wrapper {
+  background: radial-gradient(circle at top, #b8b6c5, #ffffff);
+}
+
+:root[data-theme="light"] .product-image-preview {
+  background: radial-gradient(circle at top, #b8b6c5, #ffffff);
+}
+
+/* =========================
+   TABLE (ADJUSTMENTS)
+   ========================= */
+
+.table-wrapper {
+  margin-top: 0.75rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  overflow: hidden;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+/* Theme aware header / rows */
+.table thead {
+  background: var(--bg-surface);
+}
+
+:root[data-theme="dark"] .table thead {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(30, 64, 104, 0.7);
+}
+
+.table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+.table tbody tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.15);
+}
+
+:root[data-theme="dark"] .table tbody tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.75);
+}
+
+/* Badges in table */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+.badge-green {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.badge-red {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* Pagination */
+
+.pagination {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+}
+
+/* =========================
+   MODAL
+   ========================= */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+/* Base: modal dark glass + light text, untuk kedua theme */
+.modal {
+  background: radial-gradient(circle at top left, #020617, #020617f5);
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.9);
+  padding: 1rem 1rem 0.9rem;
+  width: 100%;
+  max-width: 420px;
+  color: #f9fafb; /* <== penting: teks terang */
+}
+
+/* Di light theme, sedikit dinaikkan supaya ga terlalu pekat */
+:root[data-theme="light"] .modal {
+  background: radial-gradient(circle at top left, #78787b, #ffffff);
+  border-color: rgba(15, 23, 42, 0.65);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.modal-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #f9fafb; /* paksa judul terang */
+}
+
+.modal-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-soft);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.modal-label {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+
+.modal-input,
+.modal-textarea {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.6rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.modal-input::placeholder,
+.modal-textarea::placeholder {
+  color: var(--text-soft);
+}
+
+.modal-textarea {
+  min-height: 4rem;
+  resize: vertical;
+}
+
+.modal-footer {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.modal-error {
+  font-size: 0.75rem;
+  color: var(--danger);
+}
+
+/* =========================
+   ADJUSTMENT FORM + RESPONSIVE
+   ========================= */
+
+/* Base layout for adjustments (desktop-ish) */
+.adjustment-form {
+  margin-bottom: 0.75rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.adjustment-form .btn.btn-primary {
+  width: 100%;
+}
+
+/* Shared responsive for surface / toolbar already above */
+
+/* RESPONSIVE: tablet & phone */
+@media (max-width: 1024px) {
+  .surface {
+    margin-inline: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .surface-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toolbar {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-input {
+    flex: 1 1 100%;
+  }
+
+  .toolbar .chip {
+    padding-inline: 0.5rem;
+  }
+
+  .adjustment-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* RESPONSIVE: phone */
+@media (max-width: 640px) {
+  .surface {
+    margin-inline: 0.5rem;
+    padding: 0.6rem;
+  }
+
+  .adjustment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .adjustment-form .modal-field {
+    width: 100%;
+  }
+
+  .adjustment-form .btn.btn-primary {
+    width: 100%;
+    margin-top: 0.3rem;
+  }
+
+  .toolbar {
+    gap: 0.4rem;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .table {
+    min-width: 480px;
+  }
+}
