@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.2",
+    "pg-promise": "^12.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "migrate": "psql postgres://postgres:admin@localhost:5432/postgres -f src/db/migrations/init_1.sql"
+  }
+}
