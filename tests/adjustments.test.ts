@@ -16,7 +16,7 @@ describe("Adjustments API", () => {
   });
 
   it("should reject adjustment that makes stock negative", async () => {
-    const sku = `TEST-NEG-STOCK-${Date.now()}`;
+    const sku = `TEST-NEG-${Date.now()}`;
 
     const createRes = await app.inject({
       method: "POST",

@@ -1,0 +1,478 @@
+openapi: '3.0.2'
+info:
+  title: Inventory Console - Backend API
+  description: |-
+    Backend API Documentation for Inventory Console Service
+  version: '1.0'
+  contact:
+    name: Ayu Amelia Agustin
+    email: ayu.amelia.agustin@gmail.com
+servers:
+  - url: http://localhost:4000/api/
+
+tags:
+  - name: "Products"
+    description: "Products management endpoints"
+  - name: "Adjustments"
+    description: "Adjustments management endpoints"
+
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: List products
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: q
+          in: query
+          schema:
+            type: string
+            description: search term (name, sku, etc.)
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            description: field to sort by (e.g., "id" | "sku" | "title" | "price" | "stock" | "created_at")
+        - name: dir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            description: sort direction
+        - name: category
+          in: query
+          schema:
+            type: string
+            description: filter by category
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+
+  /products/{productId}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Products
+      summary: Get product by ID
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '404':
+          $ref: '#/components/schemas/DefaultError'
+    put:
+      tags:
+        - Products
+      summary: Update product by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+    delete:
+      tags:
+        - Products
+      summary: Delete product by ID
+      responses:
+        '204':
+          description: Product deleted (no content)
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+
+  /adjustments:
+    get:
+      tags:
+        - Adjustments
+      summary: List adjustments
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: sku
+          in: query
+          schema:
+            type: string
+            description: filter by sku
+      responses:
+        '200':
+          description: A list of adjustments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdjustmentListResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+    post:
+      tags:
+        - Adjustments
+      summary: Create an adjustment (increase/decrease stock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustmentCreate'
+      responses:
+        '201':
+          description: Adjustment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdjustmentResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+
+  /adjustments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - Adjustments
+      summary: Update an adjustment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustmentUpdate'
+      responses:
+        '200':
+          description: Updated adjustment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdjustmentResponse'
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+    delete:
+      tags:
+        - Adjustments
+      summary: Delete adjustment
+      responses:
+        '204':
+          description: Adjustment deleted (no content)
+        '4XX':
+          $ref: '#/components/schemas/DefaultError'
+
+components:
+  schemas:
+    error_code:
+      properties:
+        error:
+          type: string
+          example: null
+        error_code:
+          type: string
+          example: 0
+
+    DefaultError:
+      type: object
+      required:
+        - data
+        - error_code
+        - error_message
+      properties:
+        data:
+          type: array
+          example: []
+          items:
+            type: string
+        error_code:
+          type: string
+        error_message:
+          type: string
+
+    default_error:
+      properties:
+        status:
+          type: boolean
+          example: false
+        error_code:
+          type: string
+          example: E00X
+        error_msg:
+          type: string
+          example: Unexpected error
+        data:
+          type: array
+          example: []
+          items:
+            type: string
+
+    default_response:
+      properties:
+        status:
+          type: boolean
+          example: true
+        error_code:
+          type: integer
+          example: 0
+        error_msg:
+          type: string
+          example: null
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "prod_123"
+        sku:
+          type: string
+          example: "SKU-001"
+        title:
+          type: string
+          example: "Blue Widget"
+        price:
+          type: number
+          format: float
+          example: 12.5
+        description:
+          type: string
+          example: "A useful blue widget"
+        image_url:
+          type: string
+          example: "https://example.com/images/widget.png"
+        category:
+          type: string
+          example: "Widgets"
+        stock:
+          type: integer
+          example: 100
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ProductCreate:
+      type: object
+      required:
+        - sku
+        - title
+      properties:
+        sku:
+          type: string
+          example: "SKU-001"
+        title:
+          type: string
+          example: "Blue Widget"
+        price:
+          type: number
+          format: float
+          example: 12.5
+        description:
+          type: string
+          example: "A useful blue widget"
+        image_url:
+          type: string
+          example: "https://example.com/images/widget.png"
+        category:
+          type: string
+          example: "Widgets"
+        stock:
+          type: integer
+          example: 100
+
+    ProductUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        image_url:
+          type: string
+        category:
+          type: string
+        stock:
+          type: integer
+
+    ProductResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Product'
+        error_code:
+          type: integer
+          example: 0
+        error_msg:
+          type: string
+          example: null
+
+    ProductListResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: integer
+          example: 1
+        error_code:
+          type: integer
+          example: 0
+        error_msg:
+          type: string
+          example: null
+
+    Adjustment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "adj_123"
+        product_id:
+          type: string
+          example: "prod_123"
+        sku:
+          type: string
+          example: "SKU-001"
+        title:
+          type: string
+          example: "Blue Widget"
+        qty:
+          type: integer
+          example: 10
+        amount:
+          type: number
+          format: float
+          example: 125.0
+        created_at:
+          type: string
+          format: date-time
+
+    AdjustmentCreate:
+      type: object
+      required:
+        - product_sku
+        - product_id
+        - qty
+      properties:
+        product_sku:
+          type: string
+          example: "SKU-001"
+        product_id:
+          type: string
+          example: "prod_123"
+        qty:
+          type: integer
+          example: 10
+        amount:
+          type: number
+          format: float
+          example: 125.0
+
+    AdjustmentUpdate:
+      type: object
+      properties:
+        qty:
+          type: string
+        amount:
+          type: number
+          format: float
+
+    AdjustmentResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Adjustment'
+        error_code:
+          type: integer
+          example: 0
+        error_msg:
+          type: string
+          example: null
+
+    AdjustmentListResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Adjustment'
+        total:
+          type: integer
+          example: 0
+        error_code:
+          type: integer
+          example: 0
+        error_msg:
+          type: string
+          example: null
