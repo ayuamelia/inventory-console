@@ -236,6 +236,16 @@ Base URL in development:
 http://localhost:4000/api
 ```
 
+## API documentation (OpenAPI)
+
+This service includes an OpenAPI 3.0 specification covering all public endpoints.
+(e.g. products and adjustments).
+
+- File: `backend/api-spec-1.0.yaml`
+
+You can open it with any OpenAPI-compatible viewer (Swagger UI, Redoc, VS Code
+OpenAPI extension) to inspect request/response models and try out the endpoints.
+
 ### Products
 
 Typical endpoints:
