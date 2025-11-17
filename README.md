@@ -15,7 +15,7 @@ The focus is on **correctness, data consistency, and practical UX** rather than 
 
 ### Product management
 
-- Import products from DummyJSON and store them in PostgreSQL.
+- Import products from DummyJSON and store them in PostgreSQL (via a dedicated `/api/products/import` endpoint).
 - List products with:
   - Pagination
   - Search by SKU or title (case-insensitive, debounced)
