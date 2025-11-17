@@ -132,6 +132,48 @@ paths:
         '4XX':
           $ref: '#/components/schemas/DefaultError'
 
+  /products/import:
+    post:
+      summary: Import products from DummyJSON
+      description: >
+        Fetches products from the DummyJSON API and inserts them into the products table
+        in PostgreSQL. Existing SKUs are ignored because of a unique constraint and an
+        ON CONFLICT DO NOTHING insert strategy.
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  description: Number of products to fetch from DummyJSON.
+                  example: 50
+              required:
+                - limit
+      responses:
+        "200":
+          description: Products imported successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imported:
+                    type: integer
+                    description: >
+                      Number of products processed from DummyJSON. Some products may be
+                      skipped if their SKU already exists in the database.
+                required:
+                  - imported
+        "400":
+          description: Invalid request body
+        "500":
+          description: Error while importing products from DummyJSON or writing to the database
+
   /adjustments:
     get:
       tags:

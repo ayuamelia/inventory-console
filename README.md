@@ -108,7 +108,73 @@ psql "$DATABASE_URL" -f src/db/migrations/init_1.sql
 You can also execute the same SQL using any PostgreSQL client GUI.
 
 The API expects the `products` table to contain data.  
-During development, products are imported from DummyJSON and mapped to this schema.
+During development, products are usually imported from DummyJSON and mapped to this schema.
+
+---
+
+## Seeding data from DummyJSON
+
+To quickly populate the `products` table with realistic data, the API exposes an import endpoint that fetches products from DummyJSON and inserts them into PostgreSQL.
+
+With the products routes registered under `/api/products`, the final endpoint is:
+
+```text
+POST /api/products/import
+```
+
+Example implementation:
+
+```ts
+fastify.post<{ Body: { limit: number } }>(
+  "/import",
+  async (request, reply) => {
+    const baseUrl = process.env.DUMMYJSON_BASE_URL || "https://dummyjson.com";
+
+    const resp = await axios.get(
+      `${baseUrl}/products?limit=${request.body.limit}`
+    );
+    const items = resp.data.products as any[];
+
+    const queries = items.map((p) => {
+      return db.none(
+        `
+        INSERT INTO products (sku, title, price, description, image_url, category)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (sku) DO NOTHING
+        `,
+        [
+          String(p.id),
+          p.title,
+          p.price,
+          p.description ?? null,
+          Array.isArray(p.images) && p.images.length > 0
+            ? p.images[0]
+            : p.thumbnail ?? null,
+          p.category ?? null,
+        ]
+      );
+    });
+
+    await db.tx((t) => t.batch(queries));
+
+    reply.send({ imported: items.length });
+  }
+);
+```
+
+To import sample data after the API is running:
+
+```bash
+curl -X POST http://localhost:4000/api/products/import   -H "Content-Type: application/json"   -d '{"limit": 50}'
+```
+
+This will fetch up to `50` products from DummyJSON, insert them into `products`, ignore duplicates by SKU, and return:
+
+```json
+{
+  "imported": 50
+}
+```
 
 ---
 
@@ -189,6 +255,9 @@ Typical endpoints:
 - `POST /api/products`  
   - Creates a new product  
   - Validates unique SKU and numeric price  
+- `POST /api/products/import`  
+  - Imports products from DummyJSON into the `products` table using a `limit` parameter  
+  - Ignores existing SKUs using `ON CONFLICT (sku) DO NOTHING`  
 - `PUT /api/products/:id`  
   - Updates an existing product  
   - Rejects duplicate SKU and returns clear error message  
@@ -200,7 +269,8 @@ Typical endpoints:
 Typical endpoints:
 
 - `GET /api/adjustments`  
-  - Paginated list of adjustment transactions for all products  
+  - Paginated list of adjustment transactions for all products (10 transactions per page by design)  
+  - Supports optional filter by SKU  
 - `POST /api/adjustments`  
   - Creates a new adjustment by SKU or product id  
   - Validates that resulting stock is not negative  
@@ -214,11 +284,19 @@ These endpoints are used by the frontend to:
 
 - Display a live product catalog with current stock  
 - Perform product CRUD operations  
-- Record and manage stock movements while keeping inventory consistent
+- Record and manage stock movements while keeping inventory consistent  
 
-### Tests
+---
+
+## Tests
 
 Run unit tests for the API:
 
 ```bash
 yarn test
+```
+
+The test suite currently covers:
+
+- A smoke test for `GET /api/products` to ensure the products endpoint is reachable and returns a list.  
+- A business rule test that verifies adjustment transactions are rejected when they would make stock negative.
